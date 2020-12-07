@@ -12,6 +12,7 @@ Vue.use(Element);
 Vue.config.productionTip = false
 
 import './static/css/global.css'
+import './static/js/gt.js'
 
 import settings from "./settings";
 Vue.prototype.$settings = settings

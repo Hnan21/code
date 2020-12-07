@@ -2,8 +2,8 @@
   <div class="footer">
     <ul>
       <li v-for="(date, index) in footer_list" :key="index">
-        <a :href="date.links" target="_self" v-if="date.is_site">{{ date.title }}</a>
-        <router-link :to="date.links" v-else>{{date.title}}</router-link>
+        <a :href="date.link" target="_self" v-if="date.is_site">{{ date.title }}</a>
+        <router-link :to="date.link" v-else>{{date.title}}</router-link>
       </li>
     </ul>
   </div>
@@ -20,8 +20,8 @@ export default {
   methods:{
     get_all_footer(){
       this.$axios({
-        url: this.$settings.HOST+'home/footers',
         method: 'get',
+        url: this.$settings.HOST+'home/footers/',
       }).then(res=>{
         this.footer_list = res.data;
       }).catch(error=>{

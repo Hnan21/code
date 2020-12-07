@@ -6,20 +6,35 @@
           <router-link to="/"><img src="../static/image/logo.png" alt=""></router-link>
         </div>
         <ul class="nav full-left" v-for="(date, index) in header_list" :key="index">
-          <li><span><a :href="date.links" target="_self" v-if="date.is_site">{{}}</a>
-          <ror-luteink :to="date.links" v-else>{{ date.title }}</ror-luteink></span></li>
+          <li><span><a :href="date.link" target="_self" v-if="date.is_site">{{ date.tltle }}</a>
+            <router-link :to="date.link" v-else>{{ date.title }}</router-link></span></li>
         </ul>
-        <div class="login-bar full-right">
+
+
+        <div class="login-bar full-right" v-if="token === true">
           <div class="shop-cart full-left">
-            <img src="/static/image/cart.svg" alt="">
+            <img src="../static/image/cart.svg" alt="">
             <span><router-link to="/cart">购物车</router-link></span>
           </div>
           <div class="login-box full-left">
-            <span>登录</span>
+            <span>个人中心</span>
             &nbsp;|&nbsp;
-            <span>注册</span>
+            <span to="/" @click="loginOut">退出登录</span>
           </div>
         </div>
+
+        <div class="login-bar full-right" v-else>
+          <div class="shop-cart full-left">
+            <img src="../static/image/cart.svg" alt="">
+            <span><router-link to="/cart">购物车</router-link></span>
+          </div>
+          <div class="login-box full-left">
+            <router-link to="/login">登录</router-link>
+            &nbsp;|&nbsp;
+            <router-link to="/register">注册</router-link>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -28,25 +43,38 @@
 <script>
 export default {
   name: "Header",
-  data(){
-    return{
-      header_list: []
+  data() {
+    return {
+      header_list: [],
+      token: false,
     }
   },
-  methods:{
-    get_all_header(){
+  methods: {
+    get_token(){
+      let token = sessionStorage.token;
+      if (token){
+        this.token = true
+      }
+    },
+    get_all_header() {
       this.$axios({
-        url: this.$settings.HOST+'home/headers',
         method: 'get',
-      }).then(res=>{
+        url: this.$settings.HOST + 'home/headers/',
+      }).then(res => {
         this.header_list = res.data;
-      }).catch(error=>{
+        console.log(111, this.header_list)
+      }).catch(error => {
         console.log(error)
       })
     },
+    loginOut(){
+      this.token = false
+      sessionStorage.removeItem("token")
+    }
   },
   created() {
     this.get_all_header()
+    this.get_token()
   },
 }
 </script>
